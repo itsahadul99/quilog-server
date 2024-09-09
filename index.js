@@ -29,6 +29,21 @@ async function run() {
     try {
 
         const blogsCollection = client.db('QuilogDB').collection('blogs')
+        const usersCollection = client.db('QuilogDB').collection("users")
+
+        app.post('/user', async (req, res) => {
+            const user = req.body;
+            const userInfo = {
+                ...user
+            }
+            const result = await usersCollection.insertOne(userInfo)
+            res.send(result)
+        })
+
+        app.get('/users', async (req, res) => {
+            const result = await usersCollection.find().toArray()
+            res.send(result)
+        })
 
         app.get('/blogs', async (req, res) => {
             const result = await blogsCollection.find().toArray()
